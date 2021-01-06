@@ -49,7 +49,7 @@ $link = $http . '://' . $_SERVER['HTTP_HOST'];
                     <a href="<?php base(); ?>include/set_example.inc.php?id=<?php echo $row['id'] ?>" class="btn btn-primary w-100 mb-xs">Set as example</a>
                 <?php } ?>
                 <div class="mb-xs">
-                    <input type="text" class="form__input mb-xs iframe-text" value="<iframe src='<?php echo $link; base(); echo 'calculator_redirect/' .  $row['id']; ?>' width='100%' height='500px' title='Calculator iframe'></iframe>">
+                    <input type="text" class="form__input mb-xs iframe-text" value="<iframe src='<?php echo $link; base(); echo 'calculator_render/' .  $row['id']; ?>' width='100%' height='500px' title='Calculator iframe'></iframe>">
                     <button class="btn btn-primary w-100 iframe-copy">Copy iframe</button>
                 </div>
                 <div class="modal-overlay">

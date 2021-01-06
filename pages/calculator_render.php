@@ -80,11 +80,12 @@
     </div>
 </main>
 <?php } else { ?>
-    <main>
-        <div class="text-center">
-            <h1 class="mb-s">Calculator no longer in use...</h1>
+    <main class="d-flex jc-c ai-c hero">
+        <div class="text-center form-container p-s m-auto">
+            <h2 class="mb-s">Calculator no longer in use...</h2>
             <a href="../examples" class="btn btn-primary">Check out another calculator</a>
         </div>
     </main>
 <?php } ?>
 <script src="<?php base(); ?>javascript/calculator_render.js"></script>
+<script src="<?php base(); ?>javascript/sidebar_toggle.js"></script>
