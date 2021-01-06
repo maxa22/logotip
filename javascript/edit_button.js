@@ -13,6 +13,9 @@ for(let edit of edits) {
         let selects = container.querySelectorAll('select');
         //if selects, get their value
         let selectsValue = selects.length > 0 ? selects[0].value : '';
+        let images = container.querySelectorAll('img');
+        let imagesValuesArray = [];
+        getImageValues(images, imagesValuesArray);
         enableInputFields(inputs);
         enableInputFields(selects);
         enableInputFields(inputFiles);
@@ -23,6 +26,7 @@ for(let edit of edits) {
         cancel.addEventListener('click', e => {
             e.preventDefault();
             returnInitialValueToInputFields(inputs, inputValueArray);
+            returnImageValues(images, imagesValuesArray);
             if(selects.length > 0) {
                 selects[0].value = selectsValue;
             }

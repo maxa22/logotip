@@ -17,11 +17,7 @@
                     $validate->validateString($i . 'optionName' . $j, $_POST[$i . 'optionName' . $j]);
                     $validate->validateNumber($i . 'optionPrice' . $j, $_POST[$i . 'optionPrice' . $j]);
                     $validate->validateFile($i . 'optionImage' . $j, $i . 'optionImage' . $j);
-                    $error = Message::getError();
-                    if($error) {
-                        echo json_encode($error);
-                        exit();
-                    }
+                    
                     $j++;
                 }
             $i++;
@@ -29,6 +25,11 @@
                 echo json_encode($error);
                 exit();
             }
+        }
+        $error = Message::getError();
+        if($error) {
+            echo json_encode($error);
+            exit();
         }
     //if no error was found we can write the inputs to db 
         $i = 1;

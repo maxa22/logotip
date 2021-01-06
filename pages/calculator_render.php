@@ -56,7 +56,7 @@
 
                             <div>
                                 <input type="radio" name="<?php echo $stepRow['id'] . '-answer'; ?>" class="d-none" id="<?php echo $optionRow['name']  . '-' . $stepRow['id']; ?> " value="<?php echo $stepRow['id'] . '-answer-' . $optionRow['id']; ?> ">
-                                <label for="<?php echo $optionRow['name'] . '-' . $stepRow['id']; ?> " style="border-color: #<?php echo $calculator['color']; ?>"; class="label d-flex flex-column jc-c ai-c p-xs">
+                                <label for="<?php echo $optionRow['name'] . '-' . $stepRow['id']; ?> " class="label d-flex flex-column jc-c ai-c p-xs">
                                     <?php if($optionRow['image']) { ?>
                                         <img src="<?php base(); ?>images/<?php echo $optionRow['image'] ?>" alt="<?php echo $optionRow['name']; ?>" class="w-100 mb-xs">
                                     <?php } ?>

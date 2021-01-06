@@ -39,11 +39,11 @@
         <div class="d-flex jc-sb gap-s mb-xs">
             <div class="w-100">
                 <label for="background-color" class="d-block mb-xs">Background color</label>
-                <input type="color"  name="backgroundColor" id="background-color" class="form__input">
+                <input type="color"  name="backgroundColor" id="background-color" class="form__input" value="#f4f6f9">
             </div>
             <div class="w-100 mb-xs">
                 <label for="color" class="d-block mb-xs">Text color</label>
-                <input type="color"  name="color" id="color" class="form__input">
+                <input type="color"  name="color" id="color" class="form__input" value="#212529">
             </div>
         </div>
         <div class="mb-m">

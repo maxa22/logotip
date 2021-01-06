@@ -20,10 +20,10 @@ if(!isset($_GET['id'])) {
 
 <main style="background-color: #<?php echo $calculator['backgroundColor']; ?>; color: #<?php echo $calculator['color']; ?> ">
     <div class="hero">
-        <div class="m-auto mb-m estimate">
+        <div class="m-auto mb-m p-s text-center estimate">
             <h1 class="text-t-upper">your estimate <span><?php echo $_COOKIE['price'] . ' ' . $calculator['currency'] ?></span></h1>
         </div>
-        <div class="m-auto estimate">
+        <div class="m-auto p-s estimate">
             <p><?php echo $calculator['estimateText'] ; ?></p>
         </div>
     </div>

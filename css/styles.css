@@ -369,6 +369,8 @@ input[type="radio"]:checked + .label::after {
 .estimate {
   max-width: 54rem;
   width: 90%;
+  border: 0 solid rgba(0, 0, 0, 0.125);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.125), 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 /* utility classes */
@@ -414,6 +416,9 @@ input[type="radio"]:checked + .label::after {
 }
 .mt-s {
   margin-top: 2rem;
+}
+.mt-m {
+  margin-top: 4rem;
 }
 .mb-xs {
   margin-bottom: 1rem;
@@ -490,9 +495,6 @@ input[type="radio"]:checked + .label::after {
 }
 .btn.btn-danger:hover {
   background-color: #c82333;
-}
-.file-label:hover {
-  background-color: #138496;
 }
 /* end of utility classes */
 

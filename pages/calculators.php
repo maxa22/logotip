@@ -20,7 +20,7 @@ $link = $http . '://' . $_SERVER['HTTP_HOST'];
     require_once('include/autoloader.php');
 
     $id = $_SESSION['id'];
-    $sql = "SELECT * FROM calculator WHERE userId = ? AND archived = '0'";
+    $sql = "SELECT * FROM calculator WHERE userId = ? AND archived = '0' ORDER BY id DESC";
     $calculators = DatabaseObject::findAllByQuery($sql, $id);
     if(count($calculators) > 0) { ?>
         <div class="calculator-wrapper d-flex gap-m f-wrap">

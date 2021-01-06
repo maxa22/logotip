@@ -100,3 +100,20 @@ function isEmpty(inputs, errorArray) {
         }
     }
 }
+
+function getImageValues(images, array) {
+    for(let image of images) {
+        array.push(image.src);
+    }
+    return array;
+}
+
+function returnImageValues(images, array) {
+    for(let i = 0; i < images.length; i++) {
+        if(array[i] === window.location.href) {
+            images[i].src = '';
+        } else {
+            images[i].src = array[i];
+        }
+    }
+}

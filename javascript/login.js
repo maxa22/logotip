@@ -14,7 +14,7 @@ registrationForm.addEventListener('submit', e => {
             if(!data){
                 window.location.href = 'calculators';
             } else {
-                let errorMessage = document.querySelector('.registration-form__error');
+                let errorMessage = document.querySelectorAll('.registration-form__error')[1];
                 errorMessage.innerHTML = data['error'];
                 let inputs = document.querySelectorAll('input');
                 for(let input of inputs) {

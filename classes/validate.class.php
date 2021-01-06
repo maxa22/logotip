@@ -17,7 +17,7 @@
                 return;
             }
             if(!preg_match('/^[a-zA-Z0-9\?\s]*$/', $string)) {
-                Message::addError($key, 'Fields can only contain alfanumeric characters');
+                Message::addError($key, 'Field can only contain alfanumeric characters');
                 return;
             }
         }
@@ -27,7 +27,7 @@
                 return;
             }
             if(!preg_match('/^[a-zA-Z0-9\s]*$/', $string)) {
-                Message::addError('username', 'Fields can only contain alfanumeric characters');
+                Message::addError('username', 'Field can only contain alfanumeric characters');
                 return;
             }
         }
