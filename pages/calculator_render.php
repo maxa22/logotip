@@ -17,7 +17,7 @@
         $sql = "SELECT * FROM calculator WHERE id = ?";
         $calculator = DatabaseObject::findById($sql, $id);
         if(!$calculator) {
-            // header('Location: ../index');
+            header('Location: ../index');
             exit();
         }
     } else {
@@ -80,12 +80,10 @@
     </div>
 </main>
 <?php } else { ?>
-<body>
-<?php require_once('include/nav.php'); ?>
     <main>
-        <div class="intro form">
-            <h1 class="intro__heading mb-s">Calculator no longer in use...</h1>
-            <a href="../examples" class="intro__button">Check out another calculator</a>
+        <div class="text-center">
+            <h1 class="mb-s">Calculator no longer in use...</h1>
+            <a href="../examples" class="btn btn-primary">Check out another calculator</a>
         </div>
     </main>
 <?php } ?>
