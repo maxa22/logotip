@@ -18,7 +18,11 @@ if(!isset($_GET['id'])) {
 }
 ?>
 
+<?php if(isset($_SESSION['id'])) { ?>
 <main style="background-color: #<?php echo $calculator['backgroundColor']; ?>; color: #<?php echo $calculator['color']; ?> ">
+<?php } else { ?>
+<main class="m-auto" style="background-color: #<?php echo $calculator['backgroundColor']; ?>; color: #<?php echo $calculator['color']; ?> ">
+<?php } ?>
     <div class="hero">
         <div class="m-auto mb-m p-s text-center estimate">
             <h1 class="text-t-upper">your estimate <span><?php echo $_COOKIE['price'] . ' ' . $calculator['currency'] ?></span></h1>
@@ -29,3 +33,6 @@ if(!isset($_GET['id'])) {
     </div>
 </main>
 <script src="<?php base(); ?>javascript/check_iframe.js"></script>
+<?php if(isset($_SESSION['id'])) { ?>
+<script src="<?php base(); ?>javascript/sidebar_toggle.js"></script>
+<?php } ?>

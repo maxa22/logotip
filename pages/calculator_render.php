@@ -24,8 +24,13 @@
         header('Location: ../index');
         exit();
     }
-    if($calculator['archived'] == '0') { ?>
+    if($calculator['archived'] == '0') { 
+?>
+<?php if(isset($_SESSION['id'])) { ?>
 <main style="background-color: #<?php echo $calculator['backgroundColor']; ?>; color: #<?php echo $calculator['color']; ?> ">
+<?php } else { ?>
+<main class="m-auto" style="background-color: #<?php echo $calculator['backgroundColor']; ?>; color: #<?php echo $calculator['color']; ?> ">
+<?php } ?>
     <div class="hero">
     <div class="wrapper">
         <div class="form-container m-auto text-center p-s mb-m intro" style="background-color: #<?php echo $calculator['backgroundColor']; ?>; color: #<?php echo $calculator['color']; ?> ">

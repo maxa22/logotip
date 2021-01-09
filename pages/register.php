@@ -1,3 +1,10 @@
+<?php 
+    if(isset($_SESSION['id'])) {
+        header('Location: index');
+        exit();
+    } 
+?>
+
 <div class="wrapper">
     <div class="form-container">
         <form action=""  method="POST">

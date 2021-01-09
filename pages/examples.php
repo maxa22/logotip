@@ -3,8 +3,11 @@
         require_once('include/autoloader.php');
 ?>
 
-
+<?php if(isset($_SESSION['id'])) { ?>
 <main>
+<?php } else { ?>
+<main class="m-auto">
+<?php } ?>
 <div class="main__heading">
     <h1>Examples</h1>
 </div>
@@ -31,3 +34,6 @@
     
 </div>
 </main>
+<?php if(isset($_SESSION['id'])) { ?>
+<script src="<?php base(); ?>javascript/sidebar_toggle.js"></script>
+<?php } ?>

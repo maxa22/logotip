@@ -3,6 +3,7 @@ if(window.location !== window.parent.location) {
     for(let nav of navs) {
         nav.style.display = 'none';
     }
+    document.querySelector('main').style.margin = 'auto';
 }
 
 // displaying new question from calculator and scrolling to it
