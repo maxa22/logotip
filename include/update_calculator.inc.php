@@ -11,8 +11,9 @@
        
         foreach($_POST as $key => $value) {
             if(strpos($key, 'calculatorName')) {
+                Validate::validateString($key, $value);
                 $args['id'] = explode('-', $key)[0];
-                $args['name'] = $value;
+                $args['name'] = Sanitize::sanitizeString($value);
                 break;
             }
         }
@@ -24,28 +25,43 @@
         $args['color'] = substr($_POST['color'], 1);
         $args['currency'] = $_POST['currency'];
         $args['userId'] = $_SESSION['id']; 
-        
-        $validate = new Validate;
-        
+                
         foreach($args as $key => $value) {
-            $validate->validateString($key, $args[$key]);
-            $args[$key] = Sanitize::sanitizeString($value);
+            if(strpos(!$key, 'calculatorName')) {
+                Validate::validateString($key, $args[$key]);
+                $args[$key] = Sanitize::sanitizeString($value);
+            }
         }
-        $args['logo'] = 'logo';
-        $validate->validateFile($args['logo'], 'logo');
+
+        $args['contactForm'] = $_POST['contactForm'];
+        $args['includeContactForm'] = $_POST['includeContactForm'] ?? '0';
+        if(!empty($args['contactForm'])) {
+            Validate::validateString('contactForm', $args['contactForm']);
+            $args['contactForm'] = Sanitize::sanitizeString($args['contactForm']);
+        }
+        if(!empty($args['includeContactForm'])) {
+            Validate::validateString('includeContactForm', $args['includeContactForm']);
+            $args['includeContactForm'] = Sanitize::sanitizeString($args['includeContactForm']);
+        }
+
         $error = Message::getError();
         if($error) {
             echo json_encode($error);
             exit();
-        }
+        } 
         // get old logo if user doesn't upload new logo
-        $sql = "SELECT * FROM calculator WHERE id = ?";
-        $calculatorToBeupdated = DatabaseObject::findById($sql, $args['id']);
-        if($_FILES['logo']['error'] == 4) {
+        $calculatorToBeupdated = Calculator::findById($args['id']);
+        $args['logo'] = isset($_FILES['logo']) ? 'logo' : 'logo-updated';
+        if(isset($_FILES['logo']) && $_FILES[$args['logo']]['error'] == 4 ) {
+            // if user doesen't upload image, don't update image path
             $args['logo'] = $calculatorToBeupdated['logo'];
         } else {
-            unlink('../images/' . $calculatorToBeupdated['logo']);
+            if($calculatorToBeupdated['logo']) {
+                unlink('../images/' . $calculatorToBeupdated['logo']);
+            }
+            Validate::validateFile($args['logo'], $args['logo']);
         }
+        
         $calculator = new Calculator($args);
         $calculator->save();
         $error = Message::getError();

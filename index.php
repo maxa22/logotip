@@ -2,9 +2,8 @@
     session_start();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="<?php echo isset($_COOKIE['theme']) && $_COOKIE['theme'] == 'dark' ? 'dark' : ''; ?>">
 <?php require_once('section/head.php'); ?>
-<body>
     <!-- Navigation, same for every page -->
     <?php require_once('section/navigation.php'); ?>
     <!-- MAIN SECTION OF PAGE -->
@@ -15,5 +14,6 @@
         require('pages/index.php');
     } 
     ?>
+    <script src="<?php base(); ?>javascript/script.js"></script>
 </body>
 </html>

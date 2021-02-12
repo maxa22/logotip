@@ -2,21 +2,21 @@
     session_start();
     if(!isset($_SESSION['id'])) {
         header('Location: ../login');
+        exit();
     }
     if(isset($_POST['submit'])) {
         require_once('../include/autoloader.php');
         $i = 1;
         while(isset($_POST[$i . 'question'])) {
-            $validate = new Validate;
             //validating user input, searching for errors
-            $validate->validateString($i . 'question', $_POST[$i . 'question']);
+            Validate::validateString($i . 'question', $_POST[$i . 'question']);
             $error = Message::getError();
             if(!$error) {
                 $j = 1;
                 while(isset($_POST[$i . 'optionName' . $j])) {
-                    $validate->validateString($i . 'optionName' . $j, $_POST[$i . 'optionName' . $j]);
-                    $validate->validateNumber($i . 'optionPrice' . $j, $_POST[$i . 'optionPrice' . $j]);
-                    $validate->validateFile($i . 'optionImage' . $j, $i . 'optionImage' . $j);
+                    Validate::validateString($i . 'optionName' . $j, $_POST[$i . 'optionName' . $j]);
+                    Validate::validateNumber($i . 'optionPrice' . $j, $_POST[$i . 'optionPrice' . $j]);
+                    Validate::validateFile($i . 'optionImage' . $j, $i . 'optionImage' . $j);
                     
                     $j++;
                 }

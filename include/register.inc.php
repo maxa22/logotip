@@ -8,10 +8,9 @@
         $password = Sanitize::sanitizeString($_POST['password']);
         $confirmPassword = Sanitize::sanitizeString($_POST['confirmPassword']);
         
-        $validate = new Validate;
-        $validate->validateUsername($username);
-        $validate->validateEmail($email);
-        $validate->passwordMatch($password, $confirmPassword);
+        Validate::validateUsername($username);
+        Validate::validateEmail($email);
+        Validate::passwordMatch($password, $confirmPassword);
 
         $error = Message::getError();
         

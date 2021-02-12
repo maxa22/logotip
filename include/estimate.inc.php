@@ -8,7 +8,6 @@
     // getting the prices of the selected radio inputs, calculating them and storing in price variable
     require_once('autoloader.php');
     $price = 0;
-    $validate = new Validate;
     $steps = array();
     $choosenOptions = array();
     foreach($_POST as $key => $value) {
@@ -16,15 +15,13 @@
             // validate and sanitize input
             $id = Sanitize::sanitizeString(explode('-', $value)[2]);
             $stepId = Sanitize::sanitizeString(explode('-', $value)[0]);
-            $validate->validateString($key, $id);
-            $validate->validateString($key, $stepId);
+            Validate::validateString($key, $id);
+            Validate::validateString($key, $stepId);
 
-            $sql = "SELECT * FROM options WHERE id = ?";
-            $option = DatabaseObject::findById($sql, $id);
+            $option = Option::findById($id);
             array_push($choosenOptions, $option);
 
-            $sql = "SELECT * FROM step WHERE id = ?";
-            $step = DatabaseObject::findById($sql, $stepId);
+            $step = Step::findById($stepId);
             array_push($steps, $step);
             $price += $option['price'];
         }
@@ -32,7 +29,7 @@
 
     $error = Message::getError();
     if($error) {
-        print_r($error);
+        header('Location: ../index');
         exit();
     }
 
@@ -49,7 +46,21 @@
         $option->save();
     }
 
+
     setcookie('price', $price, time() + (86400 * 30), '/');
+    $calculatorUserArgs['choosenOptions'] = '';
+    for($i = 0; $i < count($choosenOptions); $i++) {
+        if($i + 1 == count($choosenOptions)) {
+            $calculatorUserArgs['choosenOptions'] .= $choosenOptions[$i]['id'];
+        } else {
+            $calculatorUserArgs['choosenOptions'] .= $choosenOptions[$i]['id'] . ',';
+        }
+    }
+    $calculatorUserArgs['userId'] = isset($_SESSION['id']) ? $_SESSION['id'] : 0;
+    $calculatorUserArgs['calculatorId'] = $step->calculatorId;
+
+    $calculatorUser = new CalculatorUser($calculatorUserArgs);
+    $calculatorUser->save();
 
     header('Location: ../estimate/' . $step->calculatorId);
     exit();

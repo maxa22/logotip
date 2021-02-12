@@ -3,50 +3,59 @@
         header('Location: login');
         exit();
     }
+    
 ?>
+<body>
+
 <main>
-<div class="wrapper">
+<div class="wrapper d-flex jc-c">
 <div class="form-container">
+<h1 class="card__header w-100 text-center card__header-border">Create calculator</h1>
 <form action="" method="POST">
     <div class="card-body">
-        <h2 class="card-body__heading">Create calculator</h2>
-        <div class="mb-xs">
-            <input type="text" name="name"   class="form__input" placeholder="Calculator Name" value="<?php $_POST['calculator'] ?? ''; ?>">
+        <div class="mb-xm">
+            <label for="name">Calculator name</label>
+            <input type="text" name="name" id="name"  class="form__input" value="<?php $_POST['calculator'] ?? ''; ?>">
             <span class="registration-form__error"></span>
         </div>
-        <div class="mb-xs">
-            <textarea name="estimateText"  class="form__textarea" rows="5" value="<?php $_POST['estimateText'] ?? ''; ?>" placeholder="Provide text to display users on price estimate..."><?php $_POST['estimateText'] ?? ''; ?></textarea>
+        <div class="mb-xm">
+            <label for="estimate-text">Estimate text</label>
+            <textarea name="estimateText" id="estimate-text" class="form__textarea" rows="5" value="<?php $_POST['estimateText'] ?? ''; ?>" ><?php $_POST['estimateText'] ?? ''; ?></textarea>
             <span class="registration-form__error"></span>
         </div>
-        <div class="mb-xs">
-            <input type="text" name="heading"  class="form__input" value="<?php $_POST['heading'] ?? ''; ?>" placeholder="Calculator Heading">
+        <div class="mb-xm">
+            <label for="heading">Heading</label>
+            <input type="text" name="heading" id="heading" class="form__input" value="<?php $_POST['heading'] ?? ''; ?>" >
             <span class="registration-form__error"></span>
         </div>
-        <div class="mb-xs">
-            <textarea name="calculatorText"  class="form__textarea" rows="5" value="<?php $_POST['calculatorText'] ?? ''; ?>" placeholder="Calculator text..."></textarea>
+        <div class="mb-xm">
+            <label for="calculator-text">Calculator text</label>
+            <textarea name="calculatorText" id="calculator-text" class="form__textarea" rows="5" value="<?php $_POST['calculatorText'] ?? ''; ?>" ></textarea>
             <span class="registration-form__error"></span>
         </div>
-        <div class="mb-xs">
-            <input type="text" name="button"  class="form__input" value="<?php $_POST['button'] ?? ''; ?>" placeholder="Calculator button">
+        <div class="mb-xm">
+            <label for="button">Button text</label>
+            <input type="text" name="button" id="button" class="form__input" value="<?php $_POST['button'] ?? ''; ?>" >
             <span class="registration-form__error"></span>
         </div>
-        <div class="mb-xs">
-            <label for="logo" class="file-label mb-xs">Upload logo</label>
+        <div class="mb-xm">
+            <label for="logo" class="file-label mb-xs">Upload logo <i class="fas fa-plus hide-icon"></i></label>
+            <i class="fas fa-times d-none remove-image pointer text-right mb-xs"></i>
             <input type="file" name="logo" id="logo" class="form__input-file">
             <img src="" alt="" class="calculator-image d-block m-auto">
             <span class="registration-form__error"></span>
         </div>
-        <div class="d-flex jc-sb gap-s mb-xs">
+        <div class="d-flex jc-sb gap-s mb-xm">
             <div class="w-100">
-                <label for="background-color" class="d-block mb-xs">Background color</label>
+                <label for="background-color" class="d-block mb-xm">Background color</label>
                 <input type="color"  name="backgroundColor" id="background-color" class="form__input" value="#f4f6f9">
             </div>
-            <div class="w-100 mb-xs">
-                <label for="color" class="d-block mb-xs">Text color</label>
+            <div class="w-100 mb-xm">
+                <label for="color" class="d-block mb-xm">Text color</label>
                 <input type="color"  name="color" id="color" class="form__input" value="#212529">
             </div>
         </div>
-        <div class="mb-m">
+        <div class="mb-xm">
             <select name="currency"  class="form__input">
                     <?php require_once(base() . 'section/currency_array.php'); ?>
                     <?php if($error) { ?>
@@ -60,12 +69,19 @@
             </select>
             <span class="registration-form__error"></span>
         </div>
+        <div class="mb-xm">
+            <label for="contact-form">Contact form text</label>
+            <textarea name="contactForm" id="contact-form" class="form__textarea" rows="5" value="<?php $_POST['contactForm'] ?? ''; ?>" ></textarea>
+            <span class="registration-form__error"></span>
+        </div>
+        <div class="mb-xm d-flex ai-c">
+            <input type="checkbox" name="includeContactForm" id="include-contact-form" class="form__input-checkbox" value="1">
+            <label for="include-contact-form" class="m-none">Include contact form on estimate</label>
+            <span class="registration-form__error"></span>
+        </div>
         <button class="btn btn-primary" name="submit">Submit</button>
     </form>
 </div>
 </div>
 </main>
-<script src="javascript/functions.js"></script>
-<script src="javascript/sidebar_toggle.js"></script>
-<script src="javascript/file_upload_preview.js"></script>
-<script src="javascript/create_calculator.js"></script>
+

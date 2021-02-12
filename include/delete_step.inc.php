@@ -9,10 +9,9 @@
         
         $id = $_GET['id'];
         $calculatorId = $_GET['calculator_id'];
-        $validate = new Validate;
         $key = 'id';
-        $validate->validateString($key, $id);
-        $validate->validateString($key, $calculatorId);
+        Validate::validateString($key, $id);
+        Validate::validateString($key, $calculatorId);
         $id = Sanitize::sanitizeString($id);
         $calculatorId = Sanitize::sanitizeString($calculatorId);
         $error = Message::getError();
@@ -21,10 +20,10 @@
             exit();
         }
         $sql = "SELECT * FROM step WHERE id = ?;";
-        $stepToDelete = DatabaseObject::findById($sql, $id);
+        $stepToDelete = Step::findById($id);
         $step = new Step($stepToDelete);
         $sql = "SELECT * FROM options WHERE stepId = ?";
-        $optionsToDelete = DatabaseObject::findAllByQuery($sql, $stepToDelete['id']);
+        $optionsToDelete = Option::findAllByQuery('stepId', $stepToDelete['id']);
         foreach($optionsToDelete as $optionToDelete) {
             $option = new Option($optionToDelete);
             $option->delete();

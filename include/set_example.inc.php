@@ -8,17 +8,15 @@
     if(isset($_GET['id'])) {
         require_once('autoloader.php');
         $id = $_GET['id'];
-        $validate = new Validate;
         $key = 'id';
-        $validate->validateString($key, $id);
+        Validate::validateString($key, $id);
         $error = Message::getError();
         if($error) {
             echo json_encode($error);
             exit();
         }
         $id = Sanitize::sanitizeString($id);
-        $sql = "SELECT * FROM calculator WHERE id = ?";
-        $args = DatabaseObject::findById($sql, $id);
+        $args = Calculator::findById($id);
         if($args['userId'] != $_SESSION['id']) {
             header('Location: ../login');
             exit();

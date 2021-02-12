@@ -21,6 +21,7 @@ function load_page($page){
         case 'calculator_render':
         case 'archive':
         case 'examples':
+        case 'calculator_users':
             require 'pages/' . $page . '.php';
         break;
         default:

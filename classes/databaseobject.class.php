@@ -1,7 +1,17 @@
 <?php
 
+    /**
+     * Class communicating with database
+     */
+
     class DatabaseObject {
 
+        /**
+         * get properties from class instance static database fields
+         * use the fields as array keys and class instance attributes as values
+         *
+         * @return array
+         */
         protected function properties() {
 
             $properties = array();
@@ -13,6 +23,10 @@
             return $properties;
         }
 
+        /**
+         * if object id is not set save the object to database
+         * if object id is set update the object
+         */
         public function save() {
             if(!$this->id) {
                 $this->create();
@@ -21,6 +35,14 @@
             }
         }
 
+
+        /**
+         * Create new row in database
+         * getting static object properties
+         * inserting in database table 
+         *
+         * @return void
+         */
         public function create() {
             try 
             {
@@ -42,13 +64,22 @@
             
         }
 
-        
+        /**
+         * updating database table row
+         * removing last item from object properties, should be foreign key
+         * if updating object with no foreign key insert if statement before array_pop
+         *
+         * @return void
+         */
         public function updateRow() {
             try 
             {
                 $properties = $this->properties();
                 // remove last element from array, foreign key
                 array_pop($properties);
+                if(static::$dbTable == 'artikal') {
+                    array_pop($properties);
+                }
                 $database = Database::instance();
                 $connection = $database->connect();
                 $placeholders = str_repeat('?, ', count($properties) - 1) . '?';
@@ -70,12 +101,20 @@
             }
         }
 
-        public static function findById( $sql, $id) {
+
+        /**
+         * find element from database where id is equal to provided id param
+         *
+         * @param [int] $id
+         * @return array
+         */
+        public static function findById($id) {
             try 
             {
                 $database = Database::instance();
                 $connection = $database->connect();
 
+                $sql = "SELECT * FROM " . static::$dbTable . " WHERE id = ?;";
                 $stmt = $connection->prepare($sql);
                 $stmt->bindParam('1', $id);
                 $stmt->execute();
@@ -84,15 +123,28 @@
             }
             catch(PDOException $e) 
             {
+                echo $e->getMessage();
                 Message::addError('error', $e->getMessage());
             }
         }
 
-        public static function findAllByQuery($sql,  $id) {
+        /**
+         * select everything from database table where
+         * provided placeholder parameter is equal to provided id parameter
+         *
+         * @param [string] $placeholder
+         * @param [mixed] $id
+         * @return array
+         */
+        public static function findAllByQuery($placeholder,  $id, $order = 'ASC') {
             try 
             {
+                if(!in_array($order, array('ASC', 'DESC'))) {
+                    exit();
+                }
                 $database = Database::instance();
                 $connection = $database->connect();
+                $sql = "SELECT * FROM " . static::$dbTable . " WHERE $placeholder = ? ORDER BY id $order;";
                 $stmt = $connection->prepare($sql);
                 $stmt->bindParam('1', $id);
                 $stmt->execute();
@@ -105,6 +157,102 @@
             }
 
         }
+
+        /**
+         * Get element from database table where all three placeholders match provided argument values
+         *
+         * @param [string] $placeholder
+         * @param [mixed] $id
+         * @param [string] $placeholder2
+         * @param [mixed] $id2
+         * @param [string] $placeholder3
+         * @param [mixed] $id3
+         * @return array
+         */
+        public static function findAllByQuery3($placeholder,  $id, $placeholder2, $id2, $placeholder3, $id3) {
+            try 
+            {
+                $database = Database::instance();
+                $connection = $database->connect();
+                $sql = "SELECT * FROM " . static::$dbTable . " WHERE $placeholder = ? AND $placeholder2 = ? AND $placeholder3 = ?;";
+                $stmt = $connection->prepare($sql);
+                $stmt->bindParam('1', $id);
+                $stmt->bindParam('2', $id2);
+                $stmt->bindParam('3', $id3);
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $result;
+            } 
+            catch(PDOException $e) 
+            {
+                Message::addError( 'error', $e->getMessage());
+            }
+
+        }
+        
+        /**
+         * Get element from database table where both placeholders match provided values
+         *
+         * @param [string] $placeholder
+         * @param [mixed] $id
+         * @param [string] $placeholder2
+         * @param [mixed] $id2
+         * @return array
+         */
+        public static function findAllByQuery2($placeholder,  $id, $placeholder2, $id2) {
+            try 
+            {
+                $database = Database::instance();
+                $connection = $database->connect();
+                $sql = "SELECT * FROM " . static::$dbTable . " WHERE $placeholder = ? AND $placeholder2 = ?;";
+                $stmt = $connection->prepare($sql);
+                $stmt->bindParam('1', $id);
+                $stmt->bindParam('2', $id2);
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $result;
+            } 
+            catch(PDOException $e) 
+            {
+                Message::addError( 'error', $e->getMessage());
+            }
+
+        }
+        /**
+         * Get array from database table where both placeholders match provided values
+         *
+         * @param [string] $placeholder
+         * @param [mixed] $id
+         * @param [string] $placeholder2
+         * @param [mixed] $id2
+         * @return array
+         */
+        public static function findAllByQueryWithTwoArguments($placeholder,  $id, $placeholder2, $id2) {
+            try 
+            {
+                $database = Database::instance();
+                $connection = $database->connect();
+                $sql = "SELECT * FROM " . static::$dbTable . " WHERE $placeholder = ? AND $placeholder2 = ? ORDER BY id DESC;";
+                $stmt = $connection->prepare($sql);
+                $stmt->bindParam('1', $id);
+                $stmt->bindParam('2', $id2);
+                $stmt->execute();
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $result;
+            } 
+            catch(PDOException $e) 
+            {
+                Message::addError( 'error', $e->getMessage());
+            }
+
+        }
+
+        /**
+         * Delete one element from database table where id is equal to class
+         * instance id
+         *
+         * @return void
+         */
         public function delete() {
             try 
             {
@@ -121,6 +269,105 @@
                 Message::addError( 'error', $e->getMessage());
             }
         }
+
+
+        /**
+         * Get number of selected rows
+         *
+         * @param [string] $placeholder
+         * @param [mixed] $id
+         * @return int
+         */ 
+        public static function countRows($placeholder, $id) {
+            try 
+            {
+                $database = Database::instance();
+                $connection = $database->connect();
+                $sql = "SELECT COUNT(*) FROM " . static::$dbTable . " WHERE $placeholder = ?;";
+                $stmt = $connection->prepare($sql);
+                $stmt->bindParam('1', $id);
+                $stmt->execute();
+                $rows = $stmt->fetchColumn();
+                return $rows;
+            }
+            catch(PDOException $e)
+            {
+                Message::addError('error', $e->getMessage());
+            }
+
+        }
+
+        /**
+         * find table rows with limit and offset where placeholder == id
+         * @param[string] $placeholder
+         * @param[int] $id
+         * @param[int] $limit
+         * @param[int] $offset
+         * @return [array] || error
+         */
+
+        public static function findAllWithOffset($placeholder, $id, $limit, $offset) {
+            try 
+            {
+                $database = Database::instance();
+                $connection = $database->connect();
+                $sql = "SELECT * FROM " . static::$dbTable . " WHERE $placeholder=:id ORDER BY id DESC LIMIT :limit OFFSET :offset;";
+                $stmt = $connection->prepare($sql);
+                $stmt->bindValue(':id', $id);
+                $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+                $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+                $stmt->execute();
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $result;
+            }
+            catch(PDOException $e)
+            {
+                Message::addError('error', $e->getMessage());
+            }
+
+        }
+
+
+        /**
+         * find foreign keys for table and see if in use
+         * @param string $table
+         * @param string $foreignKeyName
+         * @param string $foreignKeyValue
+         * @return array
+         */
+
+        public static function getTablesWithForeignKey($table, $foreignKeyName, $foreignKeyValue) {
+            $database = Database::instance();
+            $connection = $database->connect();
+            $exists = $connection->query("
+            SELECT
+                TABLE_NAME
+            FROM
+                INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+            WHERE
+                REFERENCED_TABLE_SCHEMA = 'login'
+                AND REFERENCED_TABLE_NAME = '$table'
+                AND REFERENCED_COLUMN_NAME = 'id';
+            ")->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach($exists as $tableName) {
+                $sql = "SELECT * FROM " . $tableName['TABLE_NAME'] . " WHERE $foreignKeyName = ?;";
+                $stmt = $connection->prepare($sql);
+                $stmt->bindParam('1', $foreignKeyValue);
+                $stmt->execute();
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                if($result) {
+                    break;
+                }
+            }
+            return $result;
+        }
+
+        /**
+         * return class instance id
+         *
+         * @return int
+         */
         public function getId() {
             return $this->id;
         }

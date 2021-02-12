@@ -11,28 +11,37 @@
             UPLOAD_ERR_CANT_WRITE   => "Failed to write file to disk.",
             UPLOAD_ERR_EXTENSION    => "A PHP extension stopped the file upload.");
 
-        public function validateString($key, $string) {
+                /**
+         * if string is empty add error message
+         * if string does not match the pattern add error message
+         * allowed alfanumeric characters, spaces and / . -
+         *
+         * @param [string] $key
+         * @param [string] $string
+         * @return void
+         */
+        public static function validateString($key, $string) {
             if(empty($string)) {
                 Message::addError($key, 'Field can\'t be empty');
                 return;
             }
-            if(!preg_match('/^[a-zA-Z0-9\?\s]*$/', $string)) {
+            if(!preg_match('/^[a-zA-Z\p{L}0-9\-\/\s,\._\'\?]*$/u', $string)) {
                 Message::addError($key, 'Field can only contain alfanumeric characters');
                 return;
             }
         }
-        public function validateUsername($string) {
+        public static function validateUsername($string) {
             if(empty($string)) {
                 Message::addError('username', 'Username can\'t be empty');
                 return;
             }
-            if(!preg_match('/^[a-zA-Z0-9\s]*$/', $string)) {
+            if(!preg_match('/^[a-zA-Z0-9\p{L}\s]*$/u', $string)) {
                 Message::addError('username', 'Field can only contain alfanumeric characters');
                 return;
             }
         }
 
-        public function validateEmail($email) {
+        public static function validateEmail($email) {
             if(empty($email)) {
                 Message::addError('email', 'Email can\'t be empty');
                 return;
@@ -42,25 +51,34 @@
                 return;
             }
         }
-        public function passwordMatch($pass, $confirm) {
-            if(empty($pass)) {
-                Message::addError('password', 'Password can\'t be empty');
+
+        public static function passwordMatch($password, $confirm) {
+            $uppercase = preg_match('@[A-Z]@', $password);
+            $lowercase = preg_match('@[a-z]@', $password);
+            $number    = preg_match('@[0-9]@', $password);
+    
+            if(!$uppercase || !$lowercase || !$number || strlen($password) < 6) {
+                Message::addError('password', 'Password must be at least 8 characters long, must contain one uppercase, one lowercase letter and one number');
                 return;
             }
-            if($pass !== $confirm) {
+            if(empty($password)) {
+                Message::addError('password', 'Field can\'t be empty');
+                return;
+            }
+            if($password !== $confirm) {
                 Message::addError('password', 'Passwords must match');
                 return;
             }
         }
 
-        public function validateNumber($key, $number){
+        public static function validateNumber($key, $number){
             if(!is_numeric($number)) {
                 Message::addError($key, 'Please provide valid price');
                 return;
             }
         }
 
-        public function validateFile($key, $k){
+        public static function validateFile($key, $k){
             if($_FILES[$k]['error'] == 4) {
                 return;
             }

@@ -8,13 +8,12 @@
     if(isset($_POST['submit'])) {
         require_once('../include/autoloader.php');
         foreach($_POST as $key => $value) {
-            $validate = new Validate;
             //validating user input, searching for errors
             if(strpos($key, 'question') || strpos($key, 'optionName')) {
-                $validate->validateString($key, $value);
+                Validate::validateString($key, $value);
             }
-            if(strpos($key, 'optionPrice')) {
-                $validate->validateNumber($key, $value);
+            if(strpos($key, 'optionPrice') || strpos($key, 'calculatorId')) {
+                Validate::validateNumber($key, $value);
             }
             $error = Message::getError();
             if($error) {
@@ -23,7 +22,7 @@
             }
         }
         foreach($_FILES as $key => $value) {
-            $validate->validateFile($key, $key);
+            Validate::validateFile($key, $key);
             $optionId = explode('-', $key)[0];
             $optionId = Sanitize::sanitizeString($optionId);
             $args[$optionId]['image'] = Sanitize::sanitizeString($key);
@@ -33,6 +32,7 @@
                 exit();
             }
         }
+        $calculatorId = Sanitize::sanitizeString($_POST['calculatorId']);
     //if no error was found we can write the inputs to db 
         foreach($_POST as $key => $value) {
             if(strpos($key, 'question') ) {
@@ -53,21 +53,24 @@
                 $args[$optionId]['price'] = Sanitize::sanitizeString($value);
             }
         }
-        $step_args = array( 'id' => $stepId, 'name' => $question, 'calculatorId' => $_SESSION['calculatorId']);
+        $step_args = array( 'id' => $stepId, 'name' => $question, 'calculatorId' => $calculatorId);
         $step = new Step($step_args);
         $step->save();
-        $sql = "SELECT * FROM options WHERE id = ?";
         foreach($args as $key => $value) {
             // check if file is new or updating
             if(!strpos($key, 'new')) {
-                $oldOption = DatabaseObject::findById($sql, $key);
-                if($_FILES[$args[$key]['image']]['error'] == 4) {
+                $oldOption = Option::findById($key);
+                if(!strpos($value['image'], 'updated') && $_FILES[$args[$key]['image']]['error'] == 4 ) {
                     // if user doesen't upload image, don't update image path
                     $args[$key]['image'] = $oldOption['image'];
-                } else {
+                } else if(!strpos($value['image'], 'updated') && $_FILES[$args[$key]['image']]['error'] == 4 ) {
+                    continue;
+                }
+                else {
                     if($oldOption['image']) {
                         unlink('../images/' . $oldOption['image']);
                     }
+                    Validate::validateFile($args[$key]['image'], $args[$key]['image']);
                 }
             }
             $option = new Option($args[$key]);

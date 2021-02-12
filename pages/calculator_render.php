@@ -4,9 +4,8 @@
     if(isset($_GET['id'])) {
         require_once('include/autoloader.php');
         $id =  $_GET['id'];
-        $validate = new Validate;
         $key = 'id';
-        $validate->validateString($key, $id);
+        Validate::validateString($key, $id);
         $id = Sanitize::sanitizeString($id);
         $error = Message::getError();
         if($error) {
@@ -15,7 +14,7 @@
         }
         // select calculator with matching id
         $sql = "SELECT * FROM calculator WHERE id = ?";
-        $calculator = DatabaseObject::findById($sql, $id);
+        $calculator = Calculator::findById($id);
         if(!$calculator) {
             header('Location: ../index');
             exit();
@@ -26,37 +25,36 @@
     }
     if($calculator['archived'] == '0') { 
 ?>
+<body style="background-color: #<?php echo $calculator['backgroundColor']; ?>; color: #<?php echo $calculator['color']; ?>">
 <?php if(isset($_SESSION['id'])) { ?>
-<main style="background-color: #<?php echo $calculator['backgroundColor']; ?>; color: #<?php echo $calculator['color']; ?> ">
+<main >
 <?php } else { ?>
-<main class="m-auto" style="background-color: #<?php echo $calculator['backgroundColor']; ?>; color: #<?php echo $calculator['color']; ?> ">
+<main class="m-auto">
 <?php } ?>
     <div class="hero">
-    <div class="wrapper">
-        <div class="form-container m-auto text-center p-s mb-m intro" style="background-color: #<?php echo $calculator['backgroundColor']; ?>; color: #<?php echo $calculator['color']; ?> ">
+    <div class="wrapper d-flex jc-c ai-c">
+        <div class="form-container m-auto text-center p-s mb-m intro">
             <h1 class="mb-s text-t-upper"><?php echo $calculator['heading']; ?></h1>
             <p class="mb-s"><?php echo $calculator['calculatorText']; ?></p>
-            <button class="btn btn-primary intro__button"><?php echo $calculator['button']; ?></button>
+            <button class="btn btn-primary intro__button mb-xs" style="border-color: #<?php echo $calculator['color']; ?>; color: #<?php echo $calculator['color']; ?>"><?php echo $calculator['button']; ?></button>
             <?php if($calculator['logo']) { ?>
-                <img src="<?php base();?>images/calculator_logo/<?php echo $calculator['logo']?>" class="calculator-image d-block m-auto" alt="calculator logo">
+                <img src="<?php base();?>images/<?php echo $calculator['logo']?>" class="calculator-image d-block m-auto" alt="calculator logo">
             <?php } ?>
         </div>    
     </div>
         <?php
-            $sql = "SELECT * FROM step WHERE calculatorId = ?";
-            $stepResult = DatabaseObject::findAllByQuery($sql, $calculator['id']);
-            if(count($stepResult) > 0) { ?>
+            $stepResult = Step::findAllByQuery('calculatorId', $calculator['id']);
+            if(!empty($stepResult)) { ?>
 
             <form action="<?php base(); ?>include/estimate.inc.php" method="POST">
 
             <?php foreach($stepResult as $stepRow) { ?>
 
-                <div class="input-wrapper d-none text-center mb-m step-<?php echo $stepRow['id']; ?>">
+                <div class="input-wrapper d-none text-center mb-m mt-m step-<?php echo $stepRow['id']; ?>">
                     <h2 class="mb-xs"><?php echo $stepRow['name']; ?></h2>
                     <div class="input-wrapper__options">
                         <?php  
-                            $sql = "SELECT * FROM options WHERE stepId = ?";
-                            $optionResult = DatabaseObject::findAllByQuery($sql, $stepRow['id']);
+                            $optionResult = Option::findAllByQuery('stepId', $stepRow['id']);
                             foreach($optionResult as $optionRow) { ?>
 
                             <div>
@@ -73,7 +71,7 @@
                 </div>
             <?php } ?>
             <div class="input-wrapper d-none text-center">
-                <button name="submit" class="btn btn-primary">Get your price estimate</button>                     
+                <button name="submit" class="btn btn-primary btn-xl h-auto" style="border-color: #<?php echo $calculator['color']; ?>; color: #<?php echo $calculator['color']; ?>">Get your price estimate</button>                     
             </div>
             </form>
             
@@ -92,5 +90,3 @@
         </div>
     </main>
 <?php } ?>
-<script src="<?php base(); ?>javascript/calculator_render.js"></script>
-<script src="<?php base(); ?>javascript/sidebar_toggle.js"></script>

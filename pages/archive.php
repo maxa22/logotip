@@ -8,20 +8,21 @@ if(!isset($_SESSION['id'])) {
 }
 
 ?>
+<body>
 
 <main>
 <div class="hero">
-<div class="mt-s mb-s">
-    <h1>Dashboard</h1>
+<div class="mt-s mb-m text-center">
+    <h1>Archived calculators</h1>
 </div>
 <?php 
     require_once('include/autoloader.php');
 
     $id = $_SESSION['id'];
-    $sql = "SELECT * FROM calculator WHERE userId = ? AND archived = '1'";
-    $calculators = DatabaseObject::findAllByQuery($sql, $id);
+    $archived = '1';
+    $calculators = Calculator::findAllByQueryWithTwoArguments('userId', $id, 'archived', $archived);
     if(count($calculators) > 0) { ?>
-        <div class="calculator-wrapper d-flex gap-m f-wrap">
+        <div class="calculator-wrapper d-flex gap-m wrap">
         <?php
          foreach($calculators as $row) { 
         ?> 
@@ -42,11 +43,10 @@ if(!isset($_SESSION['id'])) {
     <?php } ?>
         </div>
     <?php } else { ?>
-        <p>You don't have any archived calculators...</p>
+        <p>You don't have any calculator in your archive...</p>
     <?php } ?>
     
 </div>
 </div>
 </main>
 
-<script src="<?php base(); ?>javascript/sidebar_toggle.js"></script>

@@ -19,14 +19,23 @@
         $args['color'] = substr($_POST['color'], 1);
         $args['currency'] = $_POST['currency'];
         $args['userId'] = $_SESSION['id']; 
-        $validate = new Validate;
 
         foreach($args as $key => $value) {
-            $validate->validateString($key, $args[$key]);
+            Validate::validateString($key, $args[$key]);
             $args[$key] = Sanitize::sanitizeString($value);
         }
+        $args['contactForm'] = $_POST['contactForm'];
+        $args['includeContactForm'] = $_POST['includeContactForm'] ?? '0';
+        if($args['contactForm']) {
+            Validate::validateString('contactForm', $args['contactForm']);
+            $args['contactForm'] = Sanitize::sanitizeString($args['contactForm']);
+        }
+        if($args['includeContactForm']) {
+            Validate::validateString('includeContactForm', $args['includeContactForm']);
+            $args['includeContactForm'] = Sanitize::sanitizeString($args['includeContactForm']);
+        }
 
-        $validate->validateFile($args['logo'], 'logo');
+        Validate::validateFile($args['logo'], 'logo');
         $error = Message::getError();
         if($error) {
             echo json_encode($error);
