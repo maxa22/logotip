@@ -495,7 +495,7 @@ function estimate() {
     }
     document.querySelector('main').style.margin = '0 auto';
   }
-  // let contact = document.getElementById('contact');
+  let contact = document.getElementById('contact');
 
   contact.addEventListener('submit', e => {
     e.preventDefault();
