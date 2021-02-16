@@ -505,8 +505,7 @@ function estimate() {
   }
   let contact = document.getElementById('contact');
   let btn = document.getElementById('send');
-
-
+  
   contact.addEventListener('submit', e => {
     e.preventDefault();
     let resultDiv = document.getElementById('result-div');
