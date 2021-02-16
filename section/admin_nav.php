@@ -21,6 +21,9 @@
             <?php } ?>
             <a href="<?php base(); ?>index" class="navigation__link pointer"><?php echo $_SESSION['name'] ?></a>
         </li>
+        <li class="pointer d-none" id="dashboard-link">
+            <a href="<?php base(); ?>calculators" class="navigation__link pointer">Back to dashboard</a>
+        </li>
         <li class="pointer">
             <i class="fas fa-adjust dark-mode" id="theme-toggle" data-id="<?php base();?>"></i>
         </li>

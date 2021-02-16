@@ -219,6 +219,7 @@ main.active {
 label {
   display: inline-block;
   margin-bottom: 0.7rem;
+  font-weight: 700;
 }
 
 .card {
@@ -732,6 +733,9 @@ input[type="radio"]:checked + .label {
 .w-50 {
   width: 50%;
 }
+.w-50-gap-m {
+  width: calc(50% - 2rem);
+}
 .w-55 {
   width: 55%;
 }
@@ -848,6 +852,9 @@ input[type="radio"]:checked + .label {
   .l-w-50 {
     width: 50%;
   }
+  .l-w-100 {
+    width: 100%;
+  }
   .l-w-50-gap-m {
     width: calc(50% - 2rem);
   }
@@ -859,6 +866,9 @@ input[type="radio"]:checked + .label {
   }
   .l-d-none {
     display: none;
+  }
+  .l-flex-column {
+    flex-direction: column;
   }
   .input-wrapper__options {
     grid-template-columns: repeat(3, 1fr);

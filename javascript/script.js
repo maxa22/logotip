@@ -1,4 +1,5 @@
 if(window.location.href.indexOf('calculator_render') != -1)  {
+  hideSidebar();
   calculator_render();
 } else if(window.location.href.indexOf('add_question') != -1) {
   add_question();
@@ -9,18 +10,26 @@ if(window.location.href.indexOf('calculator_render') != -1)  {
 } else if(window.location.href.indexOf('edit') != -1) {
   edit();
 } else if(window.location.href.indexOf('estimate') != -1) {
+  hideSidebar();
   estimate();
 } else if(window.location.href.indexOf('login') != -1) {
   login();
 } else if(window.location.href.indexOf('register') != -1) {
   register();
+} else if(window.location.href.indexOf('archive') != -1) {
+  //
+} else if(window.location.href.indexOf('examples') != -1) {
+  //
+} else if(window.location.href.indexOf('calculator_users') != -1) {
+  calculator_users();
+} else {
+  hideSidebar();
 }
-
 
 
 function calculator_render() {
   if (window.location !== window.parent.location) {
-    let navs = document.querySelectorAll('nav, .sidebar, #sidebar-toggle');
+    let navs = document.querySelectorAll('nav');
     for (let nav of navs) {
       nav.style.display = 'none';
     }
@@ -458,7 +467,6 @@ function edit() {
     if (errorArray.length < 1) {
       postData(url, formData)
         .then(result => {
-          console.log(result)
           if (!result) {
             location.reload();
           } else {
@@ -489,31 +497,34 @@ function edit() {
 
 function estimate() {
   if (window.location !== window.parent.location) {
-    let navs = document.querySelectorAll('nav, .sidebar, #sidebar-toggle');
+    let navs = document.querySelectorAll('nav');
     for (let nav of navs) {
       nav.style.display = 'none';
     }
     document.querySelector('main').style.margin = '0 auto';
   }
-  // let contact = document.getElementById('contact');
+  let contact = document.getElementById('contact');
+  let btn = document.getElementById('send');
+
 
   contact.addEventListener('submit', e => {
     e.preventDefault();
+    let resultDiv = document.getElementById('result-div');
     let inputs = document.querySelectorAll('input');
     let errorArray = [];
-    isEmpty(inputs, errorArray);
+    isEmptyForSmallNumberOfInputs(inputs, errorArray);
     if (errorArray.length < 1) {
       const url = '../include/send_email.inc.php';
       let data = new FormData(contact);
       data.append('submit', '');
+      btn.innerHTML = 'Sending...'
       postData(url, data)
         .then(result => {
-          console.log(result)
           if (!result) {
-            let resultDiv = document.getElementById('result-div');
             resultDiv.classList.add('text-center');
-            resultDiv.innerHTML = `<h2>Email successfully send.</h2>`
+            resultDiv.innerHTML = `<h2>Email successfully send.</h2>`;
           } else {
+            btn.innerHTML = 'Contact Us! <i class="fas fa-envelope hide-icon"></i>';
             let errorMessages = document.querySelectorAll('.registration-form__error');
             for (let errorMessage of errorMessages) {
               errorMessage.innerHTML = '';
@@ -598,7 +609,117 @@ function register() {
         });
     }
   });
+}
 
+function calculator_users() {
+  calculatorId = document.getElementById('calculator');
+  let resultDiv = document.getElementById('result');
+  let statistics = document.getElementById('statistics');
+  calculatorId.addEventListener('change', e => {
+    if(e.currentTarget.value == '') {
+      resultDiv.innerHTML = '';
+      statistics.innerHTML = '';
+    } else {
+      let url = 'include/get_forms.inc.php?id=' + calculatorId.value;
+      getData(url)
+      .then(result => {
+        if(result) {
+          let div = displayCalculatorUsers(result);
+          statistics.innerHTML = displayStatistics(result);
+          resultDiv.innerHTML = div;
+        } else {
+          resultDiv.innerHTML = '<h2> Calculator not used... </h2>'
+          statistics.innerHTML = '';
+        }
+      });
+    }
+  });
+
+  function displayStatistics(result) {
+    let number = result.length - 1;
+    let div = `
+    <div class="d-flex gap-m l-flex-column">
+      <div class="w-50-gap-m l-w-100">
+        <h3 class="mb-xs">Number of calculator users</h3>
+        <p class="mb-xs">Number of user who filled out form: ${result[number]['countWithForm']}</p>
+        <p class="mb-xs">Number of user who didn't fill out form: ${result[number]['countWithNoForm']}</p>
+        <p class="mb-xm">Total number of users: ${result[number]['count']}</p>
+      </div>
+      <div class="w-50-gap-m l-w-100"></div>
+      </div> 
+      <div class="d-flex gap-m l-flex-column">
+       <div class="w-50-gap-m l-w-100"> 
+        <h3 class="mb-xs">Total price</h3>
+        <p class="mb-xs">Total price for users who didn't fill out form: ${result[number]['totalWithNoForm']}${result[number]['currency']}</p>
+        <p class="mb-xs">Total price for users who filled out form: ${result[number]['totalWithForm']}${result[number]['currency']}</p>
+        <p class="mb-xm">Total price for all users: ${result[number]['total']}${result[number]['currency']}</p>
+        </div>
+        <div class="w-50-gap-m l-w-100">
+        <h3 class="mb-xs">Average estimate price</h3>
+        <p class="mb-xs">Average estimate price for users who didn't fill out form: ${result[number]['averageEstimateWithNoForm']}${result[number]['currency']}</p>
+        <p class="mb-xs">Average estimate price for users who filled out form: ${result[number]['averageEstimateWithForm']}${result[number]['currency']}</p>
+        <p class="mb-xm">Average estimate price for all users: ${result[number]['averageEstimate']}${result[number]['currency']}</p>
+       </div> 
+      </div>
+        <p class="mb-xm">Calculator last time used: ${result[number]['date']}</p>
+    `;
+    return div;
+  }
+
+  function displayCalculatorUsers(result) {
+    let div = '';
+    for(let calculator of result) {
+      if(!calculator['id']) {
+        continue;
+      } else {
+        div += displayCalculatorUser(calculator);
+      }
+    }
+    return div;
+  }
+
+  function displayCalculatorUser(result) {
+    let div = `
+      <div class="calculator card w-25-gap-m l-w-50-gap-m m-w-100">
+        <h2 class="calculator__heading p-xs w-100 text-center"> ${result['calculatorName']} </h2>
+        <div class="card-body">
+          ${displayCalculatorStepsAndOptions(result['steps'])}
+          <p class="mb-xs"><strong>User total: </strong> ${result['estimate']}${result['currency']}</p>
+          <p class="mb-xs"><strong>User name: </strong>${result['userName']}</p>
+          ${showEmail(result)}
+          ${showText(result)}
+        </div>
+      </div>
+    `;
+    return div;
+  }
+
+  function showEmail(result) {
+    if(result['email']) {
+      return ` <p class="mb-xs"><strong>User email: </strong>${result['email']}</p>`
+    }
+    return '';
+  }
+  function showText(result) {
+    if(result['text']) {
+      return `<p class="mb-xs"><strong>User text: </strong>${result['text']}</p>`
+    }
+    return '';
+  }
+
+  function displayCalculatorStepsAndOptions(steps) {
+    let div = '';
+    let i = 1;
+    for(let step of steps) {
+      div += `
+        <p class="mb-xs">${i}. ${step['name']}</p>
+        <p class="mb-xs">Choosen option: ${step['option']}</p>
+        <p class="mb-xm">Choosen option price: ${step['price']}</p>
+        `;
+        i++;
+    }
+    return div;
+  }
 
 }
 
@@ -858,16 +979,32 @@ function removeErrorTextAndBorderColor(container) {
 }
 
 function isEmpty(inputs, errorArray) {
-  for (let input of inputs) {
+    for (let input of inputs) {
+    let errorMessage = input.parentElement.querySelector('.registration-form__error');
     if (input.value == '') {
       input.style.borderColor = '#a94442';
-      input.parentElement.querySelector('.registration-form__error').innerHTML = 'Field can\'t be empty';
+      errorMessage.innerHTML = 'Field can\'t be empty';
       errorArray.push('error');
     } else {
       input.style.borderColor = '#ced4da';
-      input.parentElement.querySelector('.registration-form__error').innerHTML = '';
+      errorMessage.innerHTML = '';
     }
   }
+}
+
+function isEmptyForSmallNumberOfInputs(inputs, errorArray) {
+    let errorMessages = document.querySelectorAll('.registration-form__error');
+    for (i = 0; i < inputs.length; i++) {
+      if (inputs[i].value.length < 1) {
+        inputs[i].style.borderColor = '#a94442';
+        errorMessages[i].innerHTML = 'Field can\'t be empty';
+        errorArray.push('error');
+      } else {
+        inputs[i].style.borderColor = '#ced4da';
+        errorMessages[i].innerHTML = '';
+      }
+  }
+
 }
 
 function getImageValues(images, array) {
@@ -892,5 +1029,28 @@ function dontUpdateFileNames(fileInputs) {
     inputName = input.name.split('-');
     inputName.pop();
     input.name = inputName.join('-');
+  }
+}
+
+function hideSidebar() {
+  const toggle = document.getElementById('sidebar-toggle');
+  let sidebar = document.querySelector('.sidebar');
+  let main = document.querySelector('main');
+  let navigation = document.querySelector('.navigation');
+  if(sidebar) {
+    sidebar.classList.add('d-none');
+    toggle.classList.add('d-none');
+  }
+  main.classList.remove('active');
+  main.style.margin = '0 auto';
+  navigation.classList.remove('active');
+  navigation.style.margin = '0 auto';
+  showDashboardNavLink();
+}
+
+function showDashboardNavLink() {
+  let dashboardNavLink = document.getElementById('dashboard-link');
+  if(dashboardNavLink) {
+    dashboardNavLink.classList.remove('d-none');
   }
 }

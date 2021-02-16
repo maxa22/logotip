@@ -51,7 +51,7 @@
             <?php foreach($stepResult as $stepRow) { ?>
 
                 <div class="input-wrapper d-none text-center mb-m mt-m step-<?php echo $stepRow['id']; ?>">
-                    <h2 class="mb-xs"><?php echo $stepRow['name']; ?></h2>
+                    <h2 class="mb-s"><?php echo $stepRow['name']; ?></h2>
                     <div class="input-wrapper__options">
                         <?php  
                             $optionResult = Option::findAllByQuery('stepId', $stepRow['id']);

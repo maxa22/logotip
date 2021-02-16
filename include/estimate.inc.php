@@ -47,7 +47,7 @@
     }
 
 
-    setcookie('price', $price, time() + (86400 * 30), '/');
+    setcookie('price', $price, time() + 1800, '/');
     $calculatorUserArgs['choosenOptions'] = '';
     for($i = 0; $i < count($choosenOptions); $i++) {
         if($i + 1 == count($choosenOptions)) {
@@ -61,6 +61,7 @@
 
     $calculatorUser = new CalculatorUser($calculatorUserArgs);
     $calculatorUser->save();
+    $_SESSION['calculatorUser'] = $calculatorUser->getId();
 
     header('Location: ../estimate/' . $step->calculatorId);
     exit();

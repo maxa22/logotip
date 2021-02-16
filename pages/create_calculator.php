@@ -13,36 +13,10 @@
 <h1 class="card__header w-100 text-center card__header-border">Create calculator</h1>
 <form action="" method="POST">
     <div class="card-body">
+    <h2 class="text-center mb-xm">Calculator settings</h2>
         <div class="mb-xm">
             <label for="name">Calculator name</label>
             <input type="text" name="name" id="name"  class="form__input" value="<?php $_POST['calculator'] ?? ''; ?>">
-            <span class="registration-form__error"></span>
-        </div>
-        <div class="mb-xm">
-            <label for="estimate-text">Estimate text</label>
-            <textarea name="estimateText" id="estimate-text" class="form__textarea" rows="5" value="<?php $_POST['estimateText'] ?? ''; ?>" ><?php $_POST['estimateText'] ?? ''; ?></textarea>
-            <span class="registration-form__error"></span>
-        </div>
-        <div class="mb-xm">
-            <label for="heading">Heading</label>
-            <input type="text" name="heading" id="heading" class="form__input" value="<?php $_POST['heading'] ?? ''; ?>" >
-            <span class="registration-form__error"></span>
-        </div>
-        <div class="mb-xm">
-            <label for="calculator-text">Calculator text</label>
-            <textarea name="calculatorText" id="calculator-text" class="form__textarea" rows="5" value="<?php $_POST['calculatorText'] ?? ''; ?>" ></textarea>
-            <span class="registration-form__error"></span>
-        </div>
-        <div class="mb-xm">
-            <label for="button">Button text</label>
-            <input type="text" name="button" id="button" class="form__input" value="<?php $_POST['button'] ?? ''; ?>" >
-            <span class="registration-form__error"></span>
-        </div>
-        <div class="mb-xm">
-            <label for="logo" class="file-label mb-xs">Upload logo <i class="fas fa-plus hide-icon"></i></label>
-            <i class="fas fa-times d-none remove-image pointer text-right mb-xs"></i>
-            <input type="file" name="logo" id="logo" class="form__input-file">
-            <img src="" alt="" class="calculator-image d-block m-auto">
             <span class="registration-form__error"></span>
         </div>
         <div class="d-flex jc-sb gap-s mb-xm">
@@ -56,7 +30,8 @@
             </div>
         </div>
         <div class="mb-xm">
-            <select name="currency"  class="form__input">
+        <label for="currency">Calculator currency</label>
+            <select name="currency" id="currency" class="form__input">
                     <?php require_once(base() . 'section/currency_array.php'); ?>
                     <?php if($error) { ?>
                         <option value="<?php echo $_POST['calculatorCurrency']; ?>" selected><?php echo $currency[$_POST['calculatorCurrency']]; ?></option>
@@ -69,8 +44,39 @@
             </select>
             <span class="registration-form__error"></span>
         </div>
+        <h2 class="text-center mb-xm">Calculator home page</h2>
         <div class="mb-xm">
-            <label for="contact-form">Contact form text</label>
+            <label for="heading">Heading</label>
+            <input type="text" name="heading" id="heading" class="form__input" value="<?php $_POST['heading'] ?? ''; ?>" >
+            <span class="registration-form__error"></span>
+        </div>
+        <div class="mb-xm">
+            <label for="calculator-text">Calculator text (Explain what calculator is)</label>
+            <textarea name="calculatorText" id="calculator-text" class="form__textarea" rows="5" value="<?php $_POST['calculatorText'] ?? ''; ?>" ></textarea>
+            <span class="registration-form__error"></span>
+        </div>
+        <div class="mb-xm">
+            <label for="button">Button text(To start a calculator)</label>
+            <input type="text" name="button" id="button" class="form__input" value="<?php $_POST['button'] ?? ''; ?>" >
+            <span class="registration-form__error"></span>
+        </div>
+        <div class="mb-xm">
+            <label for="logo">Calculator logo(image)</label>
+            <label for="logo" class="file-label mb-xs">Upload logo <i class="fas fa-plus hide-icon"></i></label>
+            <i class="fas fa-times d-none remove-image pointer text-right mb-xs"></i>
+            <input type="file" name="logo" id="logo" class="form__input-file">
+            <img src="" alt="" class="calculator-image d-block m-auto">
+            <span class="registration-form__error"></span>
+        </div>
+        <h2 class="text-center mb-xm">Calculator estimate page</h2>
+        <div class="mb-xm">
+            <label for="estimate-text">Estimate text(Text to Show After the Estimate Price)</label>
+            <textarea name="estimateText" id="estimate-text" class="form__textarea" rows="5" value="<?php $_POST['estimateText'] ?? ''; ?>" ><?php $_POST['estimateText'] ?? ''; ?></textarea>
+            <span class="registration-form__error"></span>
+        </div>
+        <h2 class="text-center mb-xm">Contact Form</h2>
+        <div class="mb-xm">
+            <label for="contact-form">Contact form text(Call Users to Contact You)</label>
             <textarea name="contactForm" id="contact-form" class="form__textarea" rows="5" value="<?php $_POST['contactForm'] ?? ''; ?>" ></textarea>
             <span class="registration-form__error"></span>
         </div>
