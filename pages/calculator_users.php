@@ -9,7 +9,7 @@ if(!isset($_SESSION['id'])) {
 require_once('include/autoloader.php');
 $id = $_SESSION['id'];
 $archived = '1';
-$calculators = Calculator::findAllByQuery('userId', $id);
+$calculators = Calculator::findAllByQuery('userId', $id, 'DESC');
 
 ?>
 

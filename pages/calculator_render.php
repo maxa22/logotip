@@ -36,7 +36,7 @@
         <div class="form-container m-auto text-center p-s mb-m intro">
             <h1 class="mb-s text-t-upper"><?php echo $calculator['heading']; ?></h1>
             <p class="mb-s"><?php echo $calculator['calculatorText']; ?></p>
-            <button class="btn btn-primary intro__button mb-xs" style="border-color: #<?php echo $calculator['color']; ?>; color: #<?php echo $calculator['color']; ?>"><?php echo $calculator['button']; ?></button>
+            <button class="btn btn-primary intro__button mb-xs" style="background-color: #<?php echo $calculator['color']; ?>;border-color: #<?php echo $calculator['color']; ?>; color: #<?php echo $calculator['backgroundColor']; ?>"><?php echo $calculator['button']; ?></button>
             <?php if($calculator['logo']) { ?>
                 <img src="<?php base();?>images/<?php echo $calculator['logo']?>" class="calculator-image d-block m-auto" alt="calculator logo">
             <?php } ?>
@@ -71,7 +71,7 @@
                 </div>
             <?php } ?>
             <div class="input-wrapper d-none text-center">
-                <button name="submit" class="btn btn-primary btn-xl h-auto" style="border-color: #<?php echo $calculator['color']; ?>; color: #<?php echo $calculator['color']; ?>">Get your price estimate</button>                     
+                <button name="submit" class="btn btn-primary btn-xl h-auto" style="background-color: #<?php echo $calculator['color']; ?>;border-color: #<?php echo $calculator['color']; ?>; color: #<?php echo $calculator['backgroundColor']; ?>">Get your price estimate</button>                     
             </div>
             </form>
             

@@ -640,8 +640,8 @@ function calculator_users() {
     <div class="d-flex gap-m l-flex-column">
       <div class="w-50-gap-m l-w-100">
         <h3 class="mb-xs">Number of calculator users</h3>
-        <p class="mb-xs">Number of user who filled out form: ${result[number]['countWithForm']}</p>
         <p class="mb-xs">Number of user who didn't fill out form: ${result[number]['countWithNoForm']}</p>
+        <p class="mb-xs">Number of user who filled out form: ${result[number]['countWithForm']}</p>
         <p class="mb-xm">Total number of users: ${result[number]['count']}</p>
       </div>
       <div class="w-50-gap-m l-w-100"></div>
